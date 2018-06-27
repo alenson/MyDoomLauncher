@@ -8,7 +8,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="MyDoomLauncher.MainWindow"
         mc:Ignorable="d"
         Title="DOOM WAD Boot" Height="700" Width="500">
-    <Grid>
-        <UserControls:AddonsView HorizontalAlignment="Left" VerticalAlignment="Top" />
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <UserControls:AddonsView DockPanel.Dock="Top" />
+    </DockPanel>
 </Window>

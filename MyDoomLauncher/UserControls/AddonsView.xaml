@@ -20,7 +20,23 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid>
-        <ListView SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Collection}" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <DockPanel Grid.Column="0" Grid.Row="0" Margin="5,0,5,0">
+            <Label DockPanel.Dock="Left" Content="_Search:" Target="{Binding ElementName=txtSearch}" Margin="0,3,0,3" Padding="0" />
+            <TextBox Name="txtSearch" DockPanel.Dock="Right" Margin="5,3,0,3" />
+        </DockPanel>
+        <ListView 
+            Name="listView1"
+            SelectedItem="{Binding SelectedItem}" 
+            ItemsSource="{Binding Collection}" 
+            Grid.Column="0"
+            Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Margin="10,10,10,10">
