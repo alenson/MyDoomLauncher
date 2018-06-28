@@ -37,7 +37,19 @@
             ItemsSource="{Binding Collection}" 
             Grid.Column="0"
             Grid.Row="1">
-            <ListView.ItemTemplate>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnStartAddon"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding LastUseDateFormatted}" />
+                    <GridViewColumn DisplayMemberBinding="{Binding TimesUsed}" />
+                </GridView>
+            </ListView.View>
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <WrapPanel Margin="10,10,10,10">
                         <WrapPanel.InputBindings>
@@ -50,7 +62,7 @@
                         <TextBlock Text="{Binding TimesUsed, Mode=OneWay}" FontWeight="Bold"/>
                     </WrapPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
         </ListView>
     </Grid>
 </UserControl>
