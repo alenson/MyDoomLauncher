@@ -29,12 +29,12 @@
         </Grid.RowDefinitions>
         <DockPanel Grid.Column="0" Grid.Row="0" Margin="5,0,5,0">
             <Label DockPanel.Dock="Left" Content="_Search:" Target="{Binding ElementName=txtSearch}" Margin="0,3,0,3" Padding="0" />
-            <TextBox Name="txtSearch" DockPanel.Dock="Right" Margin="5,3,0,3" />
+            <TextBox Name="txtSearch" DockPanel.Dock="Right" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
         <ListView 
             Name="listView1"
             SelectedItem="{Binding SelectedItem}" 
-            ItemsSource="{Binding Collection}" 
+            ItemsSource="{Binding Addons}" 
             Grid.Column="0"
             Grid.Row="1">
             <i:Interaction.Triggers>
@@ -49,20 +49,6 @@
                     <GridViewColumn DisplayMemberBinding="{Binding TimesUsed}" />
                 </GridView>
             </ListView.View>
-            <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <WrapPanel Margin="10,10,10,10">
-                        <WrapPanel.InputBindings>
-                            <MouseBinding Gesture="LeftDoubleClick" Command="{Binding Path=DataContext.StartAddonCommand, RelativeSource={RelativeSource AncestorType={x:Type UserControl}}}" />
-                        </WrapPanel.InputBindings>
-                        <TextBlock Text="{Binding Name, Mode=OneWay}" FontWeight="Bold" Margin="0,0,10,0" Width="200px" />
-                        <TextBlock Text="Last used:" Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding LastUseDateFormatted, Mode=OneWay}" FontWeight="Bold" Margin="0,0,10,0" />
-                        <TextBlock Text="Times used:" Margin="0,0,5,0" />
-                        <TextBlock Text="{Binding TimesUsed, Mode=OneWay}" FontWeight="Bold"/>
-                    </WrapPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>-->
         </ListView>
     </Grid>
 </UserControl>

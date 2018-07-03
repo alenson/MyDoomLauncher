@@ -1,8 +1,10 @@
 ﻿using MyDoomLauncher.Models;
 using MyDoomLauncher.Services;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -11,22 +13,17 @@ namespace MyDoomLauncher.ViewModels
 {
     public sealed class AddonsViewModel : INotifyPropertyChanged
     {
-        public AddonsViewModel()
-        {
-            StartAddonCommand = new RelayCommand(OnStartAddon, CanStartAddon);
-        }
-
         public async void LoadAddons()
         {
-            Collection = new ObservableCollection<AddOn>(await WadsSearch.GetAddons());
-            OnPropertyChanged("Collection");
-            StartAddonCommand.RaiseCanExecuteChanged();
+            _allAddons = await WadsSearch.GetAddons();
+            Addons = new ObservableCollection<AddOn>(_allAddons);
+            OnPropertyChanged("Addons");
         }
 
         public void ViewUnload()
         {
             History history = new History();
-            history.DeleteDataFileIfNotUsed(Collection.Count);
+            history.DeleteDataFileIfNotUsed(Addons.Count);
         }
 
         private bool CanStartAddon()
@@ -44,22 +41,49 @@ namespace MyDoomLauncher.ViewModels
             ProcessStart.StartProcess(wadFileName);
 
             History history = new History();
-            history.UpdateHistoryFromList(Collection);
+            history.UpdateHistoryFromList(Addons);
 
         }
 
-        private AddOn _selectedItem;
-        public AddOn SelectedItem
-        {
+        public AddOn SelectedItem { get; set; }
+
+        private string _searchInput;
+        public string SearchInput {
             get
             {
-                return _selectedItem;
+                return _searchInput;
             }
-
             set
             {
-                StartAddonCommand.RaiseCanExecuteChanged();
-                _selectedItem = value;
+                _searchInput = value;
+                OnPropertyChanged();
+                FilterAddons(_searchInput);
+            }
+        }
+
+        private ObservableCollection<AddOn> _addons;
+        public ObservableCollection<AddOn> Addons {
+            get
+            {
+                return _addons;
+            }
+            set
+            {
+                _addons = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private void FilterAddons(string searchInput)
+        {
+            if (string.IsNullOrWhiteSpace(searchInput) || searchInput.Length < 1)
+            {
+                Addons = new ObservableCollection<AddOn>(_allAddons);
+            }
+            else
+            {
+                searchInput = searchInput.ToLower();
+                Addons = new ObservableCollection<AddOn>(_allAddons.Where(a => a.Name.ToLower().Contains(searchInput)));
             }
         }
 
@@ -68,11 +92,7 @@ namespace MyDoomLauncher.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        public ObservableCollection<AddOn> Collection { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-
-
-        public RelayCommand StartAddonCommand { get; private set; }
-
+        private List<AddOn> _allAddons;
     }
 }
