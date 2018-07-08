@@ -43,7 +43,7 @@ namespace MyDoomLauncher.Services
 
         private static void FillDataFromHistory(List<AddOn> list)
         {
-            History history = new History();
+            HistoryProvider history = new HistoryProvider();
             history.UpdateListFromHistory(list);
         }
     }

@@ -5,9 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MyDoomLauncher.UserControls"
              xmlns:ViewModels="clr-namespace:MyDoomLauncher.ViewModels"
-             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="MyDoomLauncher.UserControls.AddonsView"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:pi="http://schemas.microsoft.com/prototyping/2010/interactivity"
+    xmlns:local1="clr-namespace:MyDoomLauncher.EventTriggers" x:Class="MyDoomLauncher.UserControls.AddonsView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <System:Double x:Key="ListFontSize">14</System:Double>
+    </UserControl.Resources>
     <UserControl.DataContext>
         <ViewModels:AddonsViewModel />
     </UserControl.DataContext>
@@ -15,11 +19,11 @@
         <i:EventTrigger EventName="Loaded">
             <ei:CallMethodAction TargetObject="{Binding}"  MethodName="LoadAddons"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="Unloaded">
-            <ei:CallMethodAction TargetObject="{Binding}"  MethodName="ViewUnload"/>
-        </i:EventTrigger>
+        <local1:EnterKeyDownEventTrigger>
+            <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnStartAddon"/>
+        </local1:EnterKeyDownEventTrigger>
     </i:Interaction.Triggers>
-    <Grid>
+    <Grid FocusManager.FocusedElement="{Binding ElementName=Search}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -28,15 +32,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <DockPanel Grid.Column="0" Grid.Row="0" Margin="5,0,5,0">
-            <Label DockPanel.Dock="Left" Content="_Search:" Target="{Binding ElementName=txtSearch}" Margin="0,3,0,3" Padding="0" />
-            <TextBox Name="txtSearch" DockPanel.Dock="Right" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
+            <Label DockPanel.Dock="Left" Content="_Search:" Target="{Binding ElementName=Search}" Margin="0,3,0,3" Padding="0" />
+            <TextBox x:Name="Search" DockPanel.Dock="Right" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
         </DockPanel>
         <ListView 
-            Name="listView1"
             SelectedItem="{Binding SelectedItem}" 
             ItemsSource="{Binding Addons}" 
             Grid.Column="0"
-            Grid.Row="1">
+            Grid.Row="1" FontSize="{DynamicResource ListFontSize}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnStartAddon"/>
@@ -46,7 +49,13 @@
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn DisplayMemberBinding="{Binding LastUseDateFormatted}" />
-                    <GridViewColumn DisplayMemberBinding="{Binding TimesUsed}" />
+                    <GridViewColumn >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="Gray" Text="{Binding TimesUsed}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>

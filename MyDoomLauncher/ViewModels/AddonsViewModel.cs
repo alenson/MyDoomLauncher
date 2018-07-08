@@ -6,8 +6,6 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace MyDoomLauncher.ViewModels
 {
@@ -15,37 +13,37 @@ namespace MyDoomLauncher.ViewModels
     {
         public async void LoadAddons()
         {
+            _history = new HistoryProvider();
             _allAddons = await WadsSearch.GetAddons();
             Addons = new ObservableCollection<AddOn>(_allAddons);
             OnPropertyChanged("Addons");
         }
 
-        public void ViewUnload()
-        {
-            History history = new History();
-            history.DeleteDataFileIfNotUsed(Addons.Count);
-        }
-
-        private bool CanStartAddon()
-        {
-            return SelectedItem != null;
-        }
-
         public void OnStartAddon()
         {
+            if (SelectedItem == null)
+            {
+                if (!TrySelectFirstPossibleItem())
+                    return;
+            }
+
             string wadFileName = SelectedItem.FileName;
 
             SelectedItem.LastUseDate = DateTime.Now;
             SelectedItem.TimesUsed++;
 
             ProcessStart.StartProcess(wadFileName);
-
-            History history = new History();
-            history.UpdateHistoryFromList(Addons);
-
+            _history.UpdateHistoryFromList(Addons);
         }
 
-        public AddOn SelectedItem { get; set; }
+        private bool TrySelectFirstPossibleItem()
+        {
+            var firstElement = Addons.FirstOrDefault();
+            if (firstElement == null)
+                return false;
+            SelectedItem = firstElement;
+            return true;
+        }
 
         private string _searchInput;
         public string SearchInput {
@@ -87,12 +85,13 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
-        private void OnPropertyChanged([CallerMemberName]string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        private void OnPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public AddOn SelectedItem { get; set; }
+
+        private HistoryProvider _history;
         private List<AddOn> _allAddons;
     }
 }

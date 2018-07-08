@@ -7,20 +7,20 @@ using System.Windows;
 
 namespace MyDoomLauncher.Services
 {
-    sealed class History
+    sealed class HistoryProvider
     {
         public void UpdateListFromHistory(IEnumerable<AddOn> list)
         {
-            if (string.IsNullOrEmpty(m_filePath))
+            if (string.IsNullOrEmpty(_filePath))
                 SetFilePath();
 
-            if (m_history == null)
+            if (_history == null)
                 LoadHistory();
 
             foreach (var item in list)
             {
-                if (m_history.ContainsKey(item.Name))
-                    CopyDetails(item, m_history[item.Name]);
+                if (_history.ContainsKey(item.Name))
+                    CopyDetails(item, _history[item.Name]);
             }
         }
 
@@ -32,69 +32,60 @@ namespace MyDoomLauncher.Services
 
         private void LoadHistory()
         {
-            if (!File.Exists(m_filePath))
+            if (!File.Exists(_filePath))
             {
-                m_history = new Dictionary<string, AddOn>();
+                _history = new Dictionary<string, AddOn>();
                 return;
             }
             try
             {
-                using (FileStream stream = File.OpenRead(m_filePath))
+                using (FileStream stream = File.OpenRead(_filePath))
                 {
                     BinaryFormatter serializer = new BinaryFormatter();
-                    m_history = serializer.Deserialize(stream) as Dictionary<string, AddOn>;
+                    _history = serializer.Deserialize(stream) as Dictionary<string, AddOn>;
                 }
             }
             catch (Exception e)
             {
                 MessageBox.Show("Error while accessing history file.\n" + e.Message, "Error", MessageBoxButton.OK);
-                m_history = new Dictionary<string, AddOn>();
+                _history = new Dictionary<string, AddOn>();
             }
         }
 
         private static void SetFilePath()
         {
-            m_filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            m_filePath = Path.Combine(m_filePath, "MyDoomLauncher", "history.bin");
+            _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            _filePath = Path.Combine(_filePath, "MyDoomLauncher", "history.bin");
         }
 
         public void UpdateHistoryFromList(IEnumerable<AddOn> list)
         {
             CreateHistoryDictionary(list);
 
-            if (string.IsNullOrEmpty(m_filePath))
+            if (string.IsNullOrEmpty(_filePath))
                 SetFilePath();
 
-            if (!Directory.Exists(Path.GetDirectoryName(m_filePath)))
-                Directory.CreateDirectory(Path.GetDirectoryName(m_filePath));
+            if (!Directory.Exists(Path.GetDirectoryName(_filePath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
 
-            using (FileStream stream = File.Create(m_filePath))
+            using (FileStream stream = File.Create(_filePath))
             {
                 BinaryFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(stream, m_history);
+                serializer.Serialize(stream, _history);
             }
         }
 
         private static void CreateHistoryDictionary(IEnumerable<AddOn> list)
         {
-            m_history = new Dictionary<string, AddOn>();
+            _history = new Dictionary<string, AddOn>();
 
             foreach(var item in list)
             {
-                m_history.Add(item.Name, item);
+                _history.Add(item.Name, item);
             }
         }
 
-        public void DeleteDataFileIfNotUsed(int itemsCount)
-        {
-            if (string.IsNullOrEmpty(m_filePath))
-                SetFilePath();
-
-            if (itemsCount == 0 && File.Exists(m_filePath))
-                File.Delete(m_filePath);
-        }
-
-        private static Dictionary<string, AddOn> m_history;
-        private static string m_filePath;
+        private static Dictionary<string, AddOn> _history;
+        private static string _filePath;
     }
 }
