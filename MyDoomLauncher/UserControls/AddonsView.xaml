@@ -47,9 +47,9 @@
             </i:Interaction.Triggers>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn DisplayMemberBinding="{Binding LastUseDateFormatted}" />
-                    <GridViewColumn >
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                    <GridViewColumn Header="Last played" DisplayMemberBinding="{Binding LastUseDateFormatted}" />
+                    <GridViewColumn Header="Times played" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Foreground="Gray" Text="{Binding TimesUsed}" />
