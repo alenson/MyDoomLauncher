@@ -11,8 +11,7 @@ namespace MyDoomLauncher.EventTriggers
 
         protected override void OnEvent(EventArgs eventArgs)
         {
-            KeyEventArgs e = eventArgs as KeyEventArgs;
-            if (e != null && e.Key == Key.Return)
+            if (eventArgs is KeyEventArgs e && e.Key == Key.Return)
                 InvokeActions(eventArgs);
         }
     }

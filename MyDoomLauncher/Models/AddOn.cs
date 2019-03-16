@@ -5,6 +5,7 @@ namespace MyDoomLauncher.Models
     [Serializable]
     public sealed class AddOn
     {
+        public bool Selected { get; set; }
         public string Name { get; set; }
         public string FileName { get; set; }
         public DateTime LastUseDate { get; set; }

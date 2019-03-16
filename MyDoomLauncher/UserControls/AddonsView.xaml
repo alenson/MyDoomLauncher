@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:MyDoomLauncher.UserControls"
              xmlns:ViewModels="clr-namespace:MyDoomLauncher.ViewModels"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:pi="http://schemas.microsoft.com/prototyping/2010/interactivity"
-    xmlns:local1="clr-namespace:MyDoomLauncher.EventTriggers" x:Class="MyDoomLauncher.UserControls.AddonsView"
+             xmlns:local1="clr-namespace:MyDoomLauncher.EventTriggers" x:Class="MyDoomLauncher.UserControls.AddonsView"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -47,6 +47,13 @@
             </i:Interaction.Triggers>
             <ListView.View>
                 <GridView>
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Selected}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Last played" DisplayMemberBinding="{Binding LastUseDateFormatted}" />
                     <GridViewColumn Header="Times played" >
