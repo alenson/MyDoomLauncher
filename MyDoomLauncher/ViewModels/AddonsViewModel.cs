@@ -51,7 +51,8 @@ namespace MyDoomLauncher.ViewModels
         }
 
         private string _searchInput;
-        public string SearchInput {
+        public string SearchInput
+        {
             get
             {
                 return _searchInput;
