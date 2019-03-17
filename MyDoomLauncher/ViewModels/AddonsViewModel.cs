@@ -27,12 +27,17 @@ namespace MyDoomLauncher.ViewModels
                     return;
             }
 
-            string wadFileName = SelectedItem.FileName;
+            ParametersBuilder parametersBuilder = new ParametersBuilder();
+            string parameters = ParametersBuilder.BuildStartParameter(SelectedItem, _allAddons);
 
-            SelectedItem.LastUseDate = DateTime.Now;
-            SelectedItem.TimesUsed++;
+            SelectedItem.RefreshLastUseDate();
+            foreach (var item in _allAddons)
+            {
+                if (item != SelectedItem && item.Selected)
+                    item.RefreshLastUseDate();
+            }
 
-            ProcessStart.StartProcess(wadFileName);
+            ProcessStart.StartProcess(parameters);
             _history.UpdateHistoryFromList(Addons);
         }
 

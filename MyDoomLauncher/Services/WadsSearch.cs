@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyDoomLauncher.Services
@@ -20,7 +19,11 @@ namespace MyDoomLauncher.Services
              {
                  foreach (var item in searchPattern.Split(','))
                  {
-                     string[] files = Directory.GetFiles(Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location), $"*.{item}", SearchOption.TopDirectoryOnly);
+                     string[] files = Directory.GetFiles(
+                         Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                         $"*.{item}",
+                         SearchOption.TopDirectoryOnly);
+
                      allFiles.AddRange(files);
                  }
 

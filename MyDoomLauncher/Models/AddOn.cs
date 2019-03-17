@@ -21,5 +21,11 @@ namespace MyDoomLauncher.Models
                 return LastUseDate.ToString("dd.MM.yyyy");
             }
         }
+
+        internal void RefreshLastUseDate()
+        {
+            LastUseDate = DateTime.Now;
+            TimesUsed++;
+        }
     }
 }

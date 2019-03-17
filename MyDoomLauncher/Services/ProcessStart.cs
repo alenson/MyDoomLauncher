@@ -7,13 +7,13 @@ namespace MyDoomLauncher.Services
 {
     static class ProcessStart
     {
-        public static void StartProcess(string target)
+        public static void StartProcess(string parameters)
         {
             string exeFile = ConfigurationManager.AppSettings.Get("Executable");
 
             try
             {
-                Process.Start(exeFile, target);
+                Process.Start(exeFile, parameters);
             }
             catch (Exception exception)
             {
