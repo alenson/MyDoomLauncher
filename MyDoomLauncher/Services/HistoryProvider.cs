@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 
@@ -41,8 +42,11 @@ namespace MyDoomLauncher.Services
             {
                 using (FileStream stream = File.OpenRead(_filePath))
                 {
-                    BinaryFormatter serializer = new BinaryFormatter();
-                    _history = serializer.Deserialize(stream) as Dictionary<string, AddOn>;
+                    using (GZipStream compressedStream = new GZipStream(stream, CompressionMode.Decompress))
+                    {
+                        BinaryFormatter serializer = new BinaryFormatter();
+                        _history = serializer.Deserialize(compressedStream) as Dictionary<string, AddOn>;
+                    }
                 }
             }
             catch (Exception e)
@@ -70,8 +74,11 @@ namespace MyDoomLauncher.Services
 
             using (FileStream stream = File.Create(_filePath))
             {
-                BinaryFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(stream, _history);
+                using (GZipStream compressedStream = new GZipStream(stream, CompressionLevel.Optimal, false))
+                {
+                    BinaryFormatter serializer = new BinaryFormatter();
+                    serializer.Serialize(compressedStream, _history);
+                }
             }
         }
 
