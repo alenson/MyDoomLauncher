@@ -27,14 +27,16 @@ namespace MyDoomLauncher.ViewModels
                     return;
             }
 
-            ParametersBuilder parametersBuilder = new ParametersBuilder();
             string parameters = ParametersBuilder.BuildStartParameter(SelectedItem, _allAddons);
 
-            SelectedItem.RefreshLastUseDate();
+            // Change date for single selected item.
+            SelectedItem.ChangeLastUseDateToNow();
+
+            // Change date for all selected items.
             foreach (var item in _allAddons)
             {
                 if (item != SelectedItem && item.Selected)
-                    item.RefreshLastUseDate();
+                    item.ChangeLastUseDateToNow();
             }
 
             ProcessStart.StartProcess(parameters);

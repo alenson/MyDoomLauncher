@@ -65,7 +65,7 @@ namespace MyDoomLauncher.Models
         [field:NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void RefreshLastUseDate()
+        internal void ChangeLastUseDateToNow()
         {
             LastUseDate = DateTime.Now;
             TimesUsed++;
