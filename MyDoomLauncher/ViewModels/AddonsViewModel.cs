@@ -39,26 +39,20 @@ namespace MyDoomLauncher.ViewModels
                     item.ChangeLastUseDateToNow();
             }
 
+#if !DEBUG
             ProcessStart.StartProcess(parameters);
+#endif
+
             _history.UpdateHistoryFromList(Addons);
         }
 
-        private bool TrySelectFirstPossibleItem()
-        {
-            var firstElement = Addons.FirstOrDefault();
-            if (firstElement == null)
-                return false;
-            SelectedItem = firstElement;
-            return true;
-        }
-
-        private string _searchInput;
         public string SearchInput
         {
             get
             {
                 return _searchInput;
             }
+
             set
             {
                 _searchInput = value;
@@ -67,12 +61,12 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
-        private ObservableCollection<AddOn> _addons;
         public ObservableCollection<AddOn> Addons {
             get
             {
                 return _addons;
             }
+
             set
             {
                 _addons = value;
@@ -93,12 +87,23 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
+        private bool TrySelectFirstPossibleItem()
+        {
+            var firstElement = Addons.FirstOrDefault();
+            if (firstElement == null)
+                return false;
+            SelectedItem = firstElement;
+            return true;
+        }
+
         private void OnPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public AddOn SelectedItem { get; set; }
 
+        private string _searchInput;
+        private ObservableCollection<AddOn> _addons;
         private HistoryProvider _history;
         private List<AddOn> _allAddons;
     }

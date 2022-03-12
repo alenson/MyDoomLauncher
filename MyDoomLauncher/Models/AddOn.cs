@@ -7,13 +7,6 @@ namespace MyDoomLauncher.Models
     [Serializable]
     public sealed class AddOn : INotifyPropertyChanged
     {
-        public bool Selected { get; set; }
-        public string Name { get; set; }
-        public string FileName { get; set; }
-
-        private int _timesUsed;
-        private DateTime _lastUseDate;
-
         public DateTime LastUseDate
         {
             get
@@ -26,6 +19,7 @@ namespace MyDoomLauncher.Models
                 {
                     _lastUseDate = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(LastUseDateFormatted));
                 }
             }
         }
@@ -45,10 +39,10 @@ namespace MyDoomLauncher.Models
             }
         }
 
-        private void OnPropertyChanged([CallerMemberName]string propertyName = "")
+        public void ChangeLastUseDateToNow()
         {
-            if (PropertyChanged != null)
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            LastUseDate = DateTime.Now;
+            TimesUsed++;
         }
 
         public string LastUseDateFormatted
@@ -62,13 +56,20 @@ namespace MyDoomLauncher.Models
             }
         }
 
+        private void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         [field:NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void ChangeLastUseDateToNow()
-        {
-            LastUseDate = DateTime.Now;
-            TimesUsed++;
-        }
+        public bool Selected { get; set; }
+        public string Name { get; set; }
+        public string FileName { get; set; }
+
+        private int _timesUsed;
+        private DateTime _lastUseDate;
     }
 }
