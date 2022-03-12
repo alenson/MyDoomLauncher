@@ -25,6 +25,26 @@ namespace MyDoomLauncher.Services
             }
         }
 
+        public void UpdateHistoryFromList(IEnumerable<AddOn> list)
+        {
+            CreateHistoryDictionary(list);
+
+            if (string.IsNullOrEmpty(_filePath))
+                SetFilePath();
+
+            if (!Directory.Exists(Path.GetDirectoryName(_filePath)))
+                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
+
+            using (FileStream stream = File.Create(_filePath))
+            {
+                using (GZipStream compressedStream = new GZipStream(stream, CompressionLevel.Optimal, false))
+                {
+                    BinaryFormatter serializer = new BinaryFormatter();
+                    serializer.Serialize(compressedStream, _history);
+                }
+            }
+        }
+
         private void CopyDetails(AddOn target, AddOn source)
         {
             target.LastUseDate = source.LastUseDate;
@@ -58,28 +78,12 @@ namespace MyDoomLauncher.Services
 
         private static void SetFilePath()
         {
+#if DEBUG
+            _filePath = Path.GetTempPath();
+#else
             _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+#endif
             _filePath = Path.Combine(_filePath, "MyDoomLauncher", "history.bin");
-        }
-
-        public void UpdateHistoryFromList(IEnumerable<AddOn> list)
-        {
-            CreateHistoryDictionary(list);
-
-            if (string.IsNullOrEmpty(_filePath))
-                SetFilePath();
-
-            if (!Directory.Exists(Path.GetDirectoryName(_filePath)))
-                Directory.CreateDirectory(Path.GetDirectoryName(_filePath));
-
-            using (FileStream stream = File.Create(_filePath))
-            {
-                using (GZipStream compressedStream = new GZipStream(stream, CompressionLevel.Optimal, false))
-                {
-                    BinaryFormatter serializer = new BinaryFormatter();
-                    serializer.Serialize(compressedStream, _history);
-                }
-            }
         }
 
         private static void CreateHistoryDictionary(IEnumerable<AddOn> list)

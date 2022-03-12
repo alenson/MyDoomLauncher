@@ -21,6 +21,6 @@ namespace MyDoomLauncher.Services
             return builder.ToString();
         }
 
-        private static string ParameterPartFormat = "{0} ";
+        private const string ParameterPartFormat = "{0} ";
     }
 }

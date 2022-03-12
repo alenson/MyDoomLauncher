@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.Runtime.CompilerServices;
 
 namespace MyDoomLauncher.Models
@@ -52,7 +53,7 @@ namespace MyDoomLauncher.Models
                 if (LastUseDate == DateTime.MinValue)
                     return "Unknown";
 
-                return LastUseDate.ToString("dd.MM.yyyy");
+                return LastUseDate.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
             }
         }
 
