@@ -31,10 +31,16 @@
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <DockPanel Grid.Column="0" Grid.Row="0" Margin="5,0,5,0">
-            <Label DockPanel.Dock="Left" Content="_Search:" Target="{Binding ElementName=Search}" Margin="0,3,0,3" Padding="0" />
-            <TextBox x:Name="Search" DockPanel.Dock="Right" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
-        </DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto "/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="_Search:" Target="{Binding ElementName=Search}" Margin="0,3,0,3" Padding="0" />
+            <TextBox Grid.Column="1" x:Name="Search" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Grid.Column="2" Margin="2" Padding="1" Command="{Binding ClearCommand}" Content="Clear" />
+        </Grid>
         <ListView 
             SelectedItem="{Binding SelectedItem}" 
             ItemsSource="{Binding Addons}" 

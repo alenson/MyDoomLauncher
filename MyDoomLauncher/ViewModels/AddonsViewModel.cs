@@ -1,4 +1,5 @@
-﻿using MyDoomLauncher.Models;
+﻿using Microsoft.Expression.Interactivity.Core;
+using MyDoomLauncher.Models;
 using MyDoomLauncher.Services;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace MyDoomLauncher.ViewModels
 {
@@ -74,6 +76,19 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
+        public ICommand ClearCommand
+        {
+            get
+            {
+                if (clearCommand == null)
+                {
+                    clearCommand = new ActionCommand(Clear);
+                }
+
+                return clearCommand;
+            }
+        }
+
         private void FilterAddons(string searchInput)
         {
             if (string.IsNullOrWhiteSpace(searchInput) || searchInput.Length < 1)
@@ -96,6 +111,8 @@ namespace MyDoomLauncher.ViewModels
             return true;
         }
 
+        private void Clear() => SearchInput = string.Empty;
+
         private void OnPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -104,7 +121,8 @@ namespace MyDoomLauncher.ViewModels
 
         private string _searchInput;
         private ObservableCollection<AddOn> _addons;
-        private HistoryProvider _history;
+        private IHistoryProvider _history;
         private List<AddOn> _allAddons;
+        private ActionCommand clearCommand;
     }
 }

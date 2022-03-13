@@ -99,6 +99,7 @@
     </ApplicationDefinition>
     <Compile Include="EventTriggers\EnterKeyDownEventTrigger.cs" />
     <Compile Include="Services\HistoryProvider.cs" />
+    <Compile Include="Services\IHistoryProvider.cs" />
     <Compile Include="Services\ParametersBuilder.cs" />
     <Compile Include="Services\ProcessStart.cs" />
     <Compile Include="Services\WadsSearch.cs" />

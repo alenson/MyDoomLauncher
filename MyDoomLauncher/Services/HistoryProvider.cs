@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace MyDoomLauncher.Services
 {
-    sealed class HistoryProvider
+    sealed class HistoryProvider : IHistoryProvider
     {
         public void UpdateListFromHistory(IEnumerable<AddOn> list)
         {
@@ -90,7 +90,7 @@ namespace MyDoomLauncher.Services
         {
             _history = new Dictionary<string, AddOn>();
 
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 _history.Add(item.Name, item);
             }
