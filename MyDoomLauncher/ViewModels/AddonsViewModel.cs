@@ -45,7 +45,7 @@ namespace MyDoomLauncher.ViewModels
             ProcessStart.StartProcess(parameters);
 #endif
 
-            _history.UpdateHistoryFromList(Addons);
+            _history.UpdateHistoryFromList(_allAddons);
         }
 
         public string SearchInput
