@@ -68,7 +68,29 @@ namespace MyDoomLauncher.Models
 
         public bool Selected { get; set; }
         public string Name { get; set; }
-        public string FileName { get; set; }
+        public string Path { get; set; }
+
+        public string FileName 
+        { 
+            get
+            {
+                return System.IO.Path.GetFileName(Path);
+            }
+
+            private set 
+            { } 
+        }
+
+        public string CommandLineFileName
+        {
+            get
+            {
+                return  ".\\" + FileName;
+            }
+
+            private set
+            { }
+        }
 
         private int _timesUsed;
         private DateTime _lastUseDate;

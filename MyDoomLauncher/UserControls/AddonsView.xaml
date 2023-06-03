@@ -30,6 +30,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
         <Grid>
             <Grid.ColumnDefinitions>
@@ -72,5 +73,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <Button Grid.Column="0" Grid.Row="2" Content="Run!" Margin="2,5,2,0" Command="{Binding RunCommand}" />
     </Grid>
 </UserControl>

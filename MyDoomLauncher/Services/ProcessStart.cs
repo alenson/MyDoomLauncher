@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.Windows;
 
@@ -9,11 +8,11 @@ namespace MyDoomLauncher.Services
     {
         public static void StartProcess(string parameters)
         {
-            string exeFile = ConfigurationManager.AppSettings.Get("Executable");
+            string executableFile = ConfigurationProvider.GetValueForCurrentConfiguration("Executable");
 
             try
             {
-                Process.Start(exeFile, parameters);
+                Process.Start(executableFile, parameters);
             }
             catch (Exception exception)
             {

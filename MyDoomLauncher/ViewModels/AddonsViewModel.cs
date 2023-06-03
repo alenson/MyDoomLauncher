@@ -1,7 +1,6 @@
 ﻿using Microsoft.Expression.Interactivity.Core;
 using MyDoomLauncher.Models;
 using MyDoomLauncher.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -41,10 +40,7 @@ namespace MyDoomLauncher.ViewModels
                     item.ChangeLastUseDateToNow();
             }
 
-#if !DEBUG
             ProcessStart.StartProcess(parameters);
-#endif
-
             _history.UpdateHistoryFromList(_allAddons);
         }
 
@@ -63,7 +59,8 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
-        public ObservableCollection<AddOn> Addons {
+        public ObservableCollection<AddOn> Addons
+        {
             get
             {
                 return _addons;
@@ -89,6 +86,19 @@ namespace MyDoomLauncher.ViewModels
             }
         }
 
+        public ICommand RunCommand
+        {
+            get
+            {
+                if (runCommand == null)
+                {
+                    runCommand = new ActionCommand(OnStartAddon);
+                }
+
+                return runCommand;
+            }
+        }
+
         private void FilterAddons(string searchInput)
         {
             if (string.IsNullOrWhiteSpace(searchInput) || searchInput.Length < 1)
@@ -111,18 +121,19 @@ namespace MyDoomLauncher.ViewModels
             return true;
         }
 
+        public AddOn SelectedItem { get; set; }
+
         private void Clear() => SearchInput = string.Empty;
 
-        private void OnPropertyChanged([CallerMemberName]string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        private void OnPropertyChanged([CallerMemberName] string name = "") => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public AddOn SelectedItem { get; set; }
 
         private string _searchInput;
         private ObservableCollection<AddOn> _addons;
         private IHistoryProvider _history;
         private List<AddOn> _allAddons;
         private ActionCommand clearCommand;
+        private ActionCommand runCommand;
     }
 }

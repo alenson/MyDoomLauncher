@@ -1,7 +1,6 @@
 ﻿using MyDoomLauncher.Models;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +11,8 @@ namespace MyDoomLauncher.Services
     {
         public async static Task<List<AddOn>> GetAddons()
         {
-            string searchPattern = ConfigurationManager.AppSettings.Get("SearchPattern");
+            // string searchPattern = ConfigurationManager.AppSettings.Get("SearchPattern");
+            string searchPattern = ConfigurationProvider.GetValueForCurrentConfiguration("SearchPattern");
             List<string> allFiles = new List<string>();
 
             return await Task.Factory.StartNew(() =>
@@ -32,7 +32,7 @@ namespace MyDoomLauncher.Services
                  {
                      list.Add(new AddOn()
                      {
-                         FileName = item,
+                         Path = item,
                          Name = Path.GetFileNameWithoutExtension(item),
                          TimesUsed = 0,
                          LastUseDate = DateTime.MinValue,

@@ -78,12 +78,14 @@ namespace MyDoomLauncher.Services
 
         private static void SetFilePath()
         {
+            string fileName = ConfigurationProvider.GetCurrentConfigurationName() + ".bin";
+
 #if DEBUG
             _filePath = Path.GetTempPath();
 #else
             _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 #endif
-            _filePath = Path.Combine(_filePath, "MyDoomLauncher", "history.bin");
+            _filePath = Path.Combine(_filePath, "MyDoomLauncher", fileName);
         }
 
         private static void CreateHistoryDictionary(IEnumerable<AddOn> list)
