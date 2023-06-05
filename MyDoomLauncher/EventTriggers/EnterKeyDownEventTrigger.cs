@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Xaml.Behaviors;
+using System;
 using System.Windows.Input;
-using System.Windows.Interactivity;
 
 namespace MyDoomLauncher.EventTriggers
 {
