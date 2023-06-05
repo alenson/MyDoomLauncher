@@ -1,3 +1,3 @@
 # MyDoomLauncher
-Simple launcher designed to start Doom source ports with single mod.
-Created in C#/WPF for personal use.
+Simple launcher designed to start Doom source ports with single mod.<br/>
+Created in C#/WPFas a quickest way to start desired WADs.
