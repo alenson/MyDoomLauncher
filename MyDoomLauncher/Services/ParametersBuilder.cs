@@ -23,14 +23,13 @@ namespace MyDoomLauncher.Services
             }
 
             AddOn iwad = GetInternalWad(selectedWads);
+            List<AddOn> distinct = selectedWads.Distinct().ToList();
 
             // Remove IWAD as it should be presented differently.
             if (iwad != null)
             {
-                selectedWads.Remove(iwad);
+                distinct.Remove(iwad);
             }
-
-            List<AddOn> distinct = selectedWads.Distinct().ToList();
 
             // Build parameters starting from IWAD and then adding rest of selected WADs.
             return CreateRunParameters(distinct, iwad).ToString();
