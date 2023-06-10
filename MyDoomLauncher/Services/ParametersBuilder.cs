@@ -7,11 +7,9 @@ namespace MyDoomLauncher.Services
 {
     class ParametersBuilder
     {
-        internal static string BuildStartParameter(AddOn clickedAddon, List<AddOn> allAddons)
+        internal static string BuildStartParameter(AddOn clickedAddon, List<AddOn> selectedWads)
         {
             // Create list of all selected WADs.
-            List<AddOn> selectedWads = new List<AddOn>();
-            selectedWads.AddRange(allAddons.Where(a => a.Selected));
             if (clickedAddon != null)
             {
                 selectedWads.Add(clickedAddon);

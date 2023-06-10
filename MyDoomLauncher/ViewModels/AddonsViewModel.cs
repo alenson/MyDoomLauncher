@@ -22,16 +22,16 @@ namespace MyDoomLauncher.ViewModels
 
         public void OnStartAddon()
         {
-            if (SelectedItem == null)
+            if (SelectedItem == null && !_allAddons.Any(a => a.Selected))
             {
                 if (!TrySelectFirstPossibleItem())
                     return;
             }
 
-            string parameters = ParametersBuilder.BuildStartParameter(SelectedItem, _allAddons);
+            string parameters = ParametersBuilder.BuildStartParameter(SelectedItem, _allAddons.Where(a => a.Selected).ToList());
 
             // Change date for single selected item.
-            SelectedItem.ChangeLastUseDateToNow();
+            SelectedItem?.ChangeLastUseDateToNow();
 
             // Change date for all selected items.
             foreach (var item in _allAddons)
