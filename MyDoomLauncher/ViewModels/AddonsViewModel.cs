@@ -28,6 +28,12 @@ namespace MyDoomLauncher.ViewModels
                     return;
             }
 
+            // Ignore currently selected if any checkbox is checked.
+            if (_allAddons.Any(a => a.Selected))
+            {
+                SelectedItem = null;
+            }
+
             string parameters = ParametersBuilder.BuildStartParameter(SelectedItem, _allAddons.Where(a => a.Selected).ToList());
 
             // Change date for single selected item.
