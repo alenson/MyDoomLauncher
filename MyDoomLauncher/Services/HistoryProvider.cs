@@ -1,6 +1,7 @@
 ﻿using MyDoomLauncher.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -86,6 +87,8 @@ namespace MyDoomLauncher.Services
             _filePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 #endif
             _filePath = Path.Combine(_filePath, "MyDoomLauncher", fileName);
+
+            Debug.Assert(_filePath.ToLowerInvariant().Contains("temp"), "Configuration path does not contain 'temp' - make sure it won't overwrite your data from release version.");
         }
 
         private static void CreateHistoryDictionary(IEnumerable<AddOn> list)
