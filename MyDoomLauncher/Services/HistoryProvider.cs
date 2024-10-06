@@ -71,7 +71,7 @@ namespace MyDoomLauncher.Services
             }
             catch (Exception e)
             {
-                MessageBox.Show("Error while accessing history file.\n" + e.Message, "Error", MessageBoxButton.OK);
+                MessageBox.Show("Error while accessing history file.\n" + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 _history = new Dictionary<string, AddOn>();
             }
         }
