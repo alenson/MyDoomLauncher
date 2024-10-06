@@ -16,7 +16,7 @@ namespace MyDoomLauncher.Services
             }
             catch (Exception exception)
             {
-                MessageBox.Show("Failed to run DOOM port.\n" + exception.Message, "Critical error!", MessageBoxButton.OK);
+                MessageBox.Show("Failed to run DOOM port.\n" + exception.Message, "Unknown error!", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
         }
