@@ -8,9 +8,58 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:ei="http://schemas.microsoft.com/xaml/behaviors" xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:pi="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:local1="clr-namespace:MyDoomLauncher.EventTriggers" x:Class="MyDoomLauncher.UserControls.AddonsView"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource ControlBackground}"
+             Foreground="{DynamicResource ControlForeground}">
     <UserControl.Resources>
         <System:Double x:Key="ListFontSize">14</System:Double>
+
+        <!-- GridView Column Header Style for dark mode -->
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Background" Value="{DynamicResource ControlBackground}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ControlForeground}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                        <Border Name="HeaderBorder" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Padding="{TemplateBinding Padding}">
+                            <TextBlock Name="HeaderContent" Text="{TemplateBinding Content}" VerticalAlignment="Center" Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="HeaderBorder" Value="{DynamicResource BorderBrush}"/>
+                                <Setter Property="Foreground" TargetName="HeaderContent" Value="{DynamicResource ControlForeground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- ListView Item Style for dark mode -->
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Foreground" Value="{DynamicResource ControlForeground}"/>
+            <Setter Property="Background" Value="{DynamicResource ControlBackground}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <GridViewRowPresenter Content="{TemplateBinding Content}" Columns="{TemplateBinding GridView.ColumnCollection}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource BorderBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="Bd" Value="{DynamicResource BorderBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <UserControl.DataContext>
         <ViewModels:AddonsViewModel />
@@ -32,24 +81,27 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Background="{DynamicResource ControlBackground}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto "/>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="_Search:" Target="{Binding ElementName=Search}" Margin="0,3,0,3" Padding="0" />
-            <TextBox Grid.Column="1" x:Name="Search" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" />
-            <Button Grid.Column="2" Margin="2" Padding="1" Command="{Binding ClearCommand}" Content="Clear" />
+            <Label Grid.Column="0" Content="_Search:" Target="{Binding ElementName=Search}" Margin="3,5,0,3" Padding="0" Foreground="{DynamicResource ControlForeground}" />
+            <TextBox Grid.Column="1" x:Name="Search" Height="22" Padding="0" FontSize="12" Margin="5,3,0,3" Text="{Binding SearchInput, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ControlForeground}" BorderBrush="{DynamicResource BorderBrush}" VerticalContentAlignment="Center" />
+            <Button Grid.Column="2" Margin="2" Padding="1" Command="{Binding ClearCommand}" Content="Clear" Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource ControlForeground}" BorderBrush="{DynamicResource BorderBrush}" />
         </Grid>
         <ListView 
             SelectedItem="{Binding SelectedItem}" 
             ItemsSource="{Binding Addons}" 
             Grid.Column="0"
-            Grid.Row="1" FontSize="{DynamicResource ListFontSize}">
+            Grid.Row="1" FontSize="{DynamicResource ListFontSize}" Background="{DynamicResource ControlBackground}" Foreground="{DynamicResource ControlForeground}" BorderBrush="{DynamicResource BorderBrush}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnStartAddon"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                    <ei:CallMethodAction TargetObject="{Binding}" MethodName="OnColumnHeaderClick"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ListView.View>
@@ -57,7 +109,7 @@
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <CheckBox IsChecked="{Binding Selected}" />
+                                <CheckBox IsChecked="{Binding Selected}" Foreground="{DynamicResource ControlForeground}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -66,13 +118,13 @@
                     <GridViewColumn Header="Times played" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Foreground="Gray" Text="{Binding TimesUsed}" />
+                                <TextBlock Foreground="{DynamicResource ControlForeground}" Text="{Binding TimesUsed}" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button Grid.Column="0" Grid.Row="2" Content="Run!" Margin="2,5,2,0" Command="{Binding RunCommand}" />
+        <Button Grid.Column="0" Grid.Row="2" Content="Run!" Margin="2,5,2,0" Command="{Binding RunCommand}" Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource ControlForeground}" BorderBrush="{DynamicResource BorderBrush}" />
     </Grid>
 </UserControl>
